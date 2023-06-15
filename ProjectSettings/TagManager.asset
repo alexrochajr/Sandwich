@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ingrediente
+  - Prato
   layers:
   - Default
   - TransparentFX

@@ -1,6 +1,8 @@
+using System.Net.Mime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class PlayerController : MonoBehaviour
     private float mouseX, mouseY; //Guarda o movimento do mouse
     [Range(0.1f, 10)]public float sensibilidadeMouse = 1; //Altera a sensibilidade do movimento da camera
     float xRotation = 0f; //Guarda o movimento do mouse na vertical invertido
+
+
 
     //-------------------------------------------------------------------------------------------------//
     //---------------------------------------Variaveis personagem--------------------------------------//
@@ -25,11 +29,21 @@ public class PlayerController : MonoBehaviour
     //---------------------------------------Variaveis Raycast e segurar-------------------------------//
     //-------------------------------------------------------------------------------------------------//
 
-    private RaycastHit hit;
-    private bool rayBateu;
-    public float distanciaDePegar = 10f;
-    public Transform areaItens;
-    private GameObject objetoSegurado;
+    //Gerar um raio que sai do meio da tela para identificar o que o jogador está olhando
+    private RaycastHit hit; //Guarda qual objeto está sendo olhado
+    private bool rayBateu; //Fica verdadeira se o jogador olhar para algo
+    public float distanciaDePegar = 1f; //Define a distancia maxima para pegar algum objeto
+    public Transform areaItens; //Guarda a area que os itens devem ficar
+    private GameObject objetoSegurado; //Guarda qual objeto está sendo segurado
+
+
+
+    //-------------------------------------------------------------------------------------------------//
+    //---------------------------------------Variaveis UI----------------------------------------------//
+    //-------------------------------------------------------------------------------------------------//
+    public GameObject mira; //Objeto da mira que fica no meio da tela
+    public Sprite miraBase; //Imagem quando não pode pegar item que está olhando
+    public Sprite miraPegar; //Imagem quando pode pegar item
     
 
 
@@ -95,13 +109,26 @@ public class PlayerController : MonoBehaviour
         
         rayBateu = Physics.Raycast(pCamera.transform.position, pCamera.transform.forward, out hit, distanciaDePegar);
 
-        if (rayBateu && hit.transform.CompareTag("Ingrediente"))
+        //Caso o jogador esteja olhando para um ingrediente e não esteja segurando nada, permite que ele aperte "E" para que segure aquele objeto
+        if (rayBateu && hit.transform.CompareTag("Ingrediente") && objetoSegurado == null) 
         {
+            mira.GetComponent<Image>().sprite = miraPegar; //Muda o icone de mira para que o jogador perceba que pode pegar
             if(Input.GetKeyDown(KeyCode.E))
             {
                 hit.transform.gameObject.GetComponent<PickableBehaviour>().Pegar(out objetoSegurado);
                 objetoSegurado.transform.parent = areaItens;
                 objetoSegurado.transform.localPosition = Vector3.zero;
+            }
+        }
+        else {mira.GetComponent<Image>().sprite = miraBase;} //Caso não olhe para nada coletavel volta a mira para o normal
+
+        //Caso o jogador olhe para o prato e está segurando algo, esse algo será colocado no sanduiche
+        if (rayBateu && hit.transform.CompareTag("Prato") && objetoSegurado != null)
+        {
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                hit.transform.gameObject.GetComponent<PratoBehaviour>().ReceberIngrediente(objetoSegurado);
+                objetoSegurado = null;
             }
         }
     }

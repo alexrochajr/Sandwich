@@ -8,6 +8,6 @@ public class Sanduiche : ScriptableObject
     public string Nome;
     public Sprite icone;
 
-    // Escolher quais ingredientes serão usados no sanduiche
+    //Escolher quais ingredientes serão usados no sanduiche
     public bool tomate, alface, carne, queijo, cogumelo;
 }
