@@ -65,22 +65,23 @@ public class PlayerController : MonoBehaviour
         //-------------------------------------------------------------------------------------------------//
         
 
-        //Armazena os movimentos do mouse apenas se o jogo não estiver parado
-        if(Time.timeScale != 0){
+        
+        if(Time.timeScale != 0) //Armazena os movimentos do mouse apenas se o jogo não estiver parado
+        {
             mouseX = Input.GetAxis("Mouse X") * sensibilidadeMouse;
             mouseY = Input.GetAxis("Mouse Y") * sensibilidadeMouse; 
         }
-        //Inverte o movimento da camera e armazena em uma nova variavel
-        xRotation -= mouseY;
+        
+        xRotation -= mouseY; //Inverte o movimento da camera e armazena em uma nova variavel
 
-        //Limita o movimento vertical em 90 graus para cada lado impedindo que de uma volta completa e a camera se inverta por exemplo
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f); //Limita o movimento vertical em 90 graus para cada lado impedindo que de uma volta completa e a camera se inverta por exemplo
 
-        //Modifica a rotação da camera 
-        pCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        
+        pCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);//Modifica a rotação da camera 
 
-        //Rotaciona o jogador com o movimento horizontal do mouse para que ele ande na direção apontada
-        transform.Rotate(Vector3.up * mouseX);
+        
+        transform.Rotate(Vector3.up * mouseX);//Rotaciona o jogador com o movimento horizontal do mouse para que ele ande na direção apontada
 
 
 
@@ -92,8 +93,8 @@ public class PlayerController : MonoBehaviour
         playerX = Input.GetAxisRaw("Horizontal"); //Captura o movimento lateral
         playerY = Input.GetAxisRaw("Vertical"); //Captura o movimento para frente e para trás
 
-        //Transforma os inputs em um vetor
-        Vector3 move = transform.forward * playerY + transform.right * playerX;
+        
+        Vector3 move = transform.forward * playerY + transform.right * playerX;//Transforma os inputs em um vetor
 
         /*Utiliza a função Move para mover o player, usando o vetor move, um valor de velocidade e multiplica pelo tempo desde o ultimo
         frame(Time.deltatime) para que não mude de maquina para maquina*/

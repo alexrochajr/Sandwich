@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Classico dos classicos
   m_EditorClassIdentifier: 
   Nome: Classico dos classicos
-  icone: {fileID: 0}
+  icone: {fileID: 21300000, guid: a642faae1e5de6e43b13b00551b4701c, type: 3}
   tomate: 0
   alface: 1
   carne: 1

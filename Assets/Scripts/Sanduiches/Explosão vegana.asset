@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "Explos\xE3o vegana"
   m_EditorClassIdentifier: 
   Nome: "Explos\xE3o Vegana"
-  icone: {fileID: 0}
+  icone: {fileID: 21300000, guid: 2db9bd045b8c4fa4b87e32d88efbde0e, type: 3}
   tomate: 1
   alface: 1
   carne: 0
