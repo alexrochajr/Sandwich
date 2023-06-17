@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 7059625184718707677}
   - component: {fileID: 9188961154496263197}
   m_Layer: 0
-  m_Name: Hamburger
+  m_Name: Hamburguer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

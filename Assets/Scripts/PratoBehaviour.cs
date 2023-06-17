@@ -9,7 +9,7 @@ public class PratoBehaviour : MonoBehaviour
     public GameObject paoTopo; //A parte de cima do pão
     public GameObject[] ingredientesColocados = new GameObject[3]; //Guarda quantos ingredientes foram colocados, sendo possivel no maximo 3
     [SerializeField]
-    private Animator animator;
+    private Animator animator; //para chamar as animações
 
     void Awake()
     {
@@ -24,12 +24,13 @@ public class PratoBehaviour : MonoBehaviour
             {
                 ingredientesColocados[i] = ingrediente;
                 ingrediente.transform.parent = ingredientePos[i];
+                ingrediente.transform.rotation = Quaternion.Euler(Vector3.zero);
                 ingrediente.transform.localPosition = Vector3.zero;
 
                 if (i == ingredientePos.Length - 1)
                 {
                     paoTopo.SetActive(true);
-                    gc.EntregarPrato();
+                    EntregarPrato();
                 }
 
                 break;
@@ -40,6 +41,7 @@ public class PratoBehaviour : MonoBehaviour
     
     public void ReiniciarPrato() //Limpa o prato para fazer um novo sanduiche, chamado no fim da animação de entrega por meio de um evento
     {
+        gc.ConferePrato();
         for (int i = 0; i < ingredientePos.Length; i++)
         {
             ingredientesColocados[i] = null;

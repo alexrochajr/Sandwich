@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ingrediente
   - Prato
+  - Deposito
+  - Jogador
   layers:
   - Default
   - TransparentFX

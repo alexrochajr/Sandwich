@@ -12,6 +12,11 @@ public class UIController : MonoBehaviour
     public TMPro.TextMeshProUGUI timerText; //Elemento textual do timer, para que o jogador saiba quanto tempo falta
     public TMPro.TextMeshProUGUI nomePedidoText, ingredientesText; //Locais quais estarão o nome e ingredientes dos pedidos
     public Image iconePedido; //Local onde aparecera a imagem dos pedidos
+    public TMPro.TextMeshProUGUI pontuacaoText; //Texto que mostra a pontuação
+    private int pontosL; //Variavel local do script de pontos
+    public GameObject pedidoPanel; 
+    public GameObject PanelFinal;
+    public TMPro.TextMeshProUGUI pontuacaoFinalText;
     
     
     public IEnumerator Contar()//A cada segundo altera o texto do contador de inicio
@@ -29,6 +34,7 @@ public class UIController : MonoBehaviour
 
     public void AtualizarPedidoUI(Sanduiche pedido)//Sempre que chamado irá alterar na UI qual é o pedido
     {
+        pedidoPanel.SetActive(true);
         nomePedidoText.text = pedido.Nome;
         ingredientesText.text = pedido.IngredientesEscolhidos()[0] + "\n" + pedido.IngredientesEscolhidos()[1] + "\n" + pedido.IngredientesEscolhidos()[2];
         iconePedido.sprite = pedido.icone;
@@ -36,5 +42,19 @@ public class UIController : MonoBehaviour
     public void AtualizarTimer(int tempo)//Modifica o texto do timer para o jogador saber quanto tempo falta
     {
         timerText.text = tempo.ToString();
+    }
+    public void AtualizaPontos(int pontos) //Muda a pontuação que está na tela
+    {
+        pontuacaoText.text = pontos.ToString() + "  pts";
+        pontosL = pontos;
+    }
+    public void LimparPedido() //Desativa o painel de pedidos para não ficar com informação defasada ou sem informação
+    {
+        pedidoPanel.SetActive(false);
+    }
+    public void Finalizar() //Ativa o painel final e informa a pontuação final
+    {
+        PanelFinal.SetActive(true);
+        pontuacaoFinalText.text = "Pontuação: " + pontosL;
     }
 }

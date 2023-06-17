@@ -34,16 +34,18 @@ public class PlayerController : MonoBehaviour
     private bool rayBateu; //Fica verdadeira se o jogador olhar para algo
     public float distanciaDePegar = 1f; //Define a distancia maxima para pegar algum objeto
     public Transform areaItens; //Guarda a area que os itens devem ficar
+    [SerializeField]
     private GameObject objetoSegurado; //Guarda qual objeto está sendo segurado
 
 
 
     //-------------------------------------------------------------------------------------------------//
-    //---------------------------------------Variaveis UI----------------------------------------------//
+    //---------------------------------------Variaveis Interface---------------------------------------//
     //-------------------------------------------------------------------------------------------------//
     public GameObject mira; //Objeto da mira que fica no meio da tela
     public Sprite miraBase; //Imagem quando não pode pegar item que está olhando
-    public Sprite miraPegar; //Imagem quando pode pegar item
+    public Sprite miraInteragir; //Imagem quando pode pegar item
+    public IngredientesInterface ingredientesInterface; //Usada para chamar a função que ativa as interfaces da plantação ou geladeira
     
 
 
@@ -110,15 +112,13 @@ public class PlayerController : MonoBehaviour
         
         rayBateu = Physics.Raycast(pCamera.transform.position, pCamera.transform.forward, out hit, distanciaDePegar);
 
-        //Caso o jogador esteja olhando para um ingrediente e não esteja segurando nada, permite que ele aperte "E" para que segure aquele objeto
-        if (rayBateu && hit.transform.CompareTag("Ingrediente") && objetoSegurado == null) 
+        //Caso o jogador esteja olhando para um deposito e não esteja segurando nada, permite que ele aperte "E" para abrir o deposito
+        if (rayBateu && hit.transform.CompareTag("Deposito") && objetoSegurado == null) 
         {
-            mira.GetComponent<Image>().sprite = miraPegar; //Muda o icone de mira para que o jogador perceba que pode pegar
+            mira.GetComponent<Image>().sprite = miraInteragir; //Muda o icone de mira para que o jogador perceba que pode interagir
             if(Input.GetKeyDown(KeyCode.E))
             {
-                hit.transform.gameObject.GetComponent<PickableBehaviour>().Pegar(out objetoSegurado);
-                objetoSegurado.transform.parent = areaItens;
-                objetoSegurado.transform.localPosition = Vector3.zero;
+                ingredientesInterface.AbrirDeposito(hit.transform.gameObject); //Envia qual objeto está olhando para que possa ser comparado e abrir a interface correta
             }
         }
         else {mira.GetComponent<Image>().sprite = miraBase;} //Caso não olhe para nada coletavel volta a mira para o normal
@@ -132,6 +132,13 @@ public class PlayerController : MonoBehaviour
                 objetoSegurado = null;
             }
         }
+    }
+
+    public void Pegar(GameObject objetoRecebido) //Pega objeto que essa função receber e coloca na area dos itens
+    {
+        objetoRecebido.transform.parent = areaItens;
+        objetoRecebido.transform.localPosition = Vector3.zero;
+        objetoSegurado = objetoRecebido;
     }
 
 }

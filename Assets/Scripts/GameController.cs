@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -12,15 +13,19 @@ public class GameController : MonoBehaviour
     [HideInInspector]
     public Sanduiche pedido; //variavel usada para armazenar qual é o pedido atual
     public Sanduiche[] sanduiches; //Lista de sanduiches possiveis
-    private int pontuacao; 
+    private int pontuacao; //Guarda a pontuação atual
     private bool timerComecou; //Verdadeiro quando puder começar a contar o tempo que o jogador tem
     private float quandoTimerComecou; //Guarda quando a partida começou para que o timer esteja correto
     private int timer; //Guarda quanto tempo falta para acabar a rodada
     public int tempoLimite = 120; //Maximo de tempo da rodada
+    public GameObject jogador;
+    private GameObject cliente;
 
     void Start()
     {
+        pontuacao = 0;
         StartCoroutine(ui.Contar());
+        Time.timeScale = 1;
     }
     
     void FixedUpdate()
@@ -30,16 +35,21 @@ public class GameController : MonoBehaviour
             timer = (int)(Time.time - quandoTimerComecou);
             ui.AtualizarTimer(tempoLimite - timer);
         }
+        if(timer == tempoLimite){FimDoJogo();}
     }
 
     public void ComecarContagem() //Atualiza as variaveis necessarias e chama o primeiro cliente
     {
         timerComecou = true;
         quandoTimerComecou = Time.time;
-        gerador.GerarCliente();
+        GerarCliente();
+    }
+    public void GerarCliente() //Função criada para caso outro objeto necessite criar outro cliente
+    {
+        gerador.GerarCliente(out cliente);
     }
 
-    public void EntregarPrato() //Executa todas as ações necessarias para verificar se foi feito o sanduiche certo e permitir um novo pedido
+    public void ConferePrato() //Executa todas as ações necessarias para verificar se foi feito o sanduiche certo e permitir um novo pedido
     {
 
         int ingredientesCorretos = 0;
@@ -62,8 +72,9 @@ public class GameController : MonoBehaviour
             RemovePontos();
             ingredientesCorretos = 0;
         }
-
-        pb.EntregarPrato();
+        pedido = null;
+        ui.LimparPedido();
+        cliente.GetComponent<ClienteBehaviour>().Sair();
     }
 
     public void NovoSanduiche() //Cria um pedido novo
@@ -74,11 +85,31 @@ public class GameController : MonoBehaviour
 
     void AdicionaPontos()
     {
-        Debug.Log("adiciona");
+        pontuacao += 10;
+        ui.AtualizaPontos(pontuacao);
     }
 
     void RemovePontos()
     {
-        Debug.Log("remove");
+        pontuacao -= 10;
+        if(pontuacao <= 0){pontuacao = 0;} //Não permite pontuação negativa
+        ui.AtualizaPontos(pontuacao);
+    }
+
+    private void FimDoJogo()
+    {
+        Time.timeScale = 0;
+        jogador.GetComponent<PlayerController>().enabled = false;
+        ui.Finalizar();
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void ReiniciarFase()
+    {
+        SceneManager.LoadScene("Cozinha");
+    }
+    public void VoltarParaMenu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }
