@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-    public void Jogar()
+    public void Jogar() //Função para botão
     {
         SceneManager.LoadScene("Cozinha");
     }

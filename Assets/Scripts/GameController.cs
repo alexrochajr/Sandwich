@@ -20,12 +20,30 @@ public class GameController : MonoBehaviour
     public int tempoLimite = 120; //Maximo de tempo da rodada
     public GameObject jogador;
     private GameObject cliente;
+    private bool jogoPausado; //Informa se o jogo está pausado ou não
+    
 
     void Start()
     {
         pontuacao = 0;
         StartCoroutine(ui.Contar());
         Time.timeScale = 1;
+    }
+    
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P)) //Detecta o input para pausar, feito no update para detectar mesmo com timescale 0
+        {
+            Debug.Log("tentando pausar");
+            if(jogoPausado)
+            {
+                VoltarJogo();
+            }
+            else
+            {
+                PausarJogo();
+            }
+        }
     }
     
     void FixedUpdate()
@@ -69,7 +87,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            RemovePontos();
+            RemovePontos(10);
             ingredientesCorretos = 0;
         }
         pedido = null;
@@ -89,9 +107,9 @@ public class GameController : MonoBehaviour
         ui.AtualizaPontos(pontuacao);
     }
 
-    void RemovePontos()
+    public void RemovePontos(int pontosARetirar) //Recebe o valor que deve ser retirado pois multiplas fontes alteram esse valor de formas diferentes
     {
-        pontuacao -= 10;
+        pontuacao -= pontosARetirar;
         if(pontuacao <= 0){pontuacao = 0;} //Não permite pontuação negativa
         ui.AtualizaPontos(pontuacao);
     }
@@ -104,12 +122,28 @@ public class GameController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
-    public void ReiniciarFase()
+    public void ReiniciarFase() //Função para botão
     {
         SceneManager.LoadScene("Cozinha");
     }
-    public void VoltarParaMenu()
+    public void VoltarParaMenu() //Função para botão
     {
         SceneManager.LoadScene("Menu");
+    }
+    private void PausarJogo() //Para o jogo e ativa o menu de pausa
+    {
+        Time.timeScale = 0;
+        jogador.GetComponent<PlayerController>().enabled = false;
+        ui.PauseState(!jogoPausado);
+        jogoPausado = !jogoPausado;
+        Cursor.lockState = CursorLockMode.None;
+    }
+    private void VoltarJogo() //Retorna o jogo ao estado normal
+    {
+        Time.timeScale = 1;
+        jogador.GetComponent<PlayerController>().enabled = true;
+        ui.PauseState(!jogoPausado);
+        jogoPausado = !jogoPausado;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }

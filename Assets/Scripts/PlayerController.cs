@@ -1,3 +1,4 @@
+using System;
 using System.Net.Mime;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameController gc;
     //-------------------------------------------------------------------------------------------------//
     //----------------------------------------Variaveis camera-----------------------------------------//
     //-------------------------------------------------------------------------------------------------//
@@ -53,9 +55,8 @@ public class PlayerController : MonoBehaviour
     {
         pCamera = Camera.main; //pCamera agora corresponde a "Main Camera" na cena
         Cursor.lockState = CursorLockMode.Locked; //Trava o cursor no meio da tela
+        gc = FindAnyObjectByType<GameController>();
     }
-
-
 
 
 
@@ -132,12 +133,25 @@ public class PlayerController : MonoBehaviour
                 objetoSegurado = null;
             }
         }
+
+        //Caso o jogador olhe para o lixo com algo na mão, destruira o que está sendo segurado e vai retirar pontos
+        if (rayBateu && hit.transform.CompareTag("Lixo") && objetoSegurado != null)
+        {
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                Destroy(objetoSegurado);
+                objetoSegurado = null;
+                gc.RemovePontos(5);
+
+            }
+        }
     }
 
     public void Pegar(GameObject objetoRecebido) //Pega objeto que essa função receber e coloca na area dos itens
     {
         objetoRecebido.transform.parent = areaItens;
         objetoRecebido.transform.localPosition = Vector3.zero;
+        objetoRecebido.transform.localRotation = Quaternion.Euler(Vector3.zero);
         objetoSegurado = objetoRecebido;
     }
 

@@ -8,6 +8,7 @@ TagManager:
   - Prato
   - Deposito
   - Jogador
+  - Lixo
   layers:
   - Default
   - TransparentFX

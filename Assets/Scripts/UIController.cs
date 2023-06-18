@@ -15,21 +15,22 @@ public class UIController : MonoBehaviour
     public TMPro.TextMeshProUGUI pontuacaoText; //Texto que mostra a pontuação
     private int pontosL; //Variavel local do script de pontos
     public GameObject pedidoPanel; 
-    public GameObject PanelFinal;
+    public GameObject panelFinal;
     public TMPro.TextMeshProUGUI pontuacaoFinalText;
+    public GameObject pausePanel;
     
     
     public IEnumerator Contar()//A cada segundo altera o texto do contador de inicio
     {
         contagemText.text = "3";
-        yield return new WaitForSecondsRealtime(1.2f);
+        yield return new WaitForSeconds(1);
         contagemText.text = "2";
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSeconds(1);
         contagemText.text = "1";
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSeconds(1);
         gc.ComecarContagem(); //Avisa o GameController que pode começar a contar o tempo que o jogador tem
         contagemText.text = "VAI";
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSeconds(1);
     }
 
     public void AtualizarPedidoUI(Sanduiche pedido)//Sempre que chamado irá alterar na UI qual é o pedido
@@ -45,7 +46,7 @@ public class UIController : MonoBehaviour
     }
     public void AtualizaPontos(int pontos) //Muda a pontuação que está na tela
     {
-        pontuacaoText.text = pontos.ToString() + "  pts";
+        pontuacaoText.text = pontos.ToString() + " pts";
         pontosL = pontos;
     }
     public void LimparPedido() //Desativa o painel de pedidos para não ficar com informação defasada ou sem informação
@@ -54,7 +55,11 @@ public class UIController : MonoBehaviour
     }
     public void Finalizar() //Ativa o painel final e informa a pontuação final
     {
-        PanelFinal.SetActive(true);
+        panelFinal.SetActive(true);
         pontuacaoFinalText.text = "Pontuação: " + pontosL;
+    }
+    public void PauseState(bool pausado) //Ativa o panel de pause
+    {
+        pausePanel.SetActive(pausado);
     }
 }

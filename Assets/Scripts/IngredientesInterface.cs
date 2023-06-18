@@ -19,6 +19,14 @@ public class IngredientesInterface : MonoBehaviour
         itemGerando.name = nomeIngrediente;
         pc.Pegar(itemGerando);
     }
+    public void FecharInterface() //Caso o jogador tenha aberto a interface errada pode fechar usando um botão que use essa função
+    {
+        pc.mira.SetActive(true);
+        pc.enabled = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        geladeiraInterface.SetActive(false);
+        plantacaoInterface.SetActive(false);
+    }
     public void AbrirDeposito(GameObject deposito) //Abre a interface de escolhas de ingrediente e deixa o jogador parado
     {
         pc.mira.SetActive(false);

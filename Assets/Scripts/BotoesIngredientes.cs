@@ -7,7 +7,7 @@ public class BotoesIngredientes : MonoBehaviour
 {
     private PlayerController pc;
     private IngredientesInterface ii;
-    public GameObject ingrediente; //Ingrediente que será criado
+    public GameObject ingrediente; //prefab do ingrediente que será criado
     public String nomeIngrediente;
     void Start()
     {
